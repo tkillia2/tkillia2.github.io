@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Generic
-description: Lorem ipsum dolor est
+title: About Me
+description: Learn more about Tommy!
 image: assets/images/pic11.jpg
 nav-menu: true
 ---
