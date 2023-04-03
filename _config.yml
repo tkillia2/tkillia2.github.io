@@ -30,6 +30,7 @@ socials:
   Twitter: 
   Facebook:
   Slack:
+  File-User: www.nd.edu
 
 # build settings
 markdown: kramdown
