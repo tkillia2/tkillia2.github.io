@@ -2,7 +2,7 @@
 layout: post
 title: About Me
 description: Learn more about Tommy!
-image: assets/images/pic11.jpg
+image: assets/images/pic06.jpg
 nav-menu: true
 ---
 
