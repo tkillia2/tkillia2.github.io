@@ -1,7 +1,7 @@
 ---
 title: Projects
 layout: landing
-description: 'Lorem ipsum dolor sit amet nullam consequa<br />sed veroeros. tempus adipiscing nulla.'
+description: 'Hear about some of my projects!<br />They can be from school or personal.
 image: assets/images/pic07.jpg
 nav-menu: true
 ---
