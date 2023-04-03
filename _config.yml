@@ -24,7 +24,7 @@ tiles-count: 6
 socials:
   GitHub: https://github.com/tkillia2
   GitLab: 
-  tiktok: https://www.linkedin.com/in/thomaskillian
+  Google-Plus: 
   Instagram:
   LinkedIn: https://www.linkedin.com/in/thomaskillian
   Twitter: 
@@ -42,3 +42,6 @@ exclude:
 - LICENSE.md
 - CONTRIBUTING.md
 - README.md 
+
+plugins:
+- jekyll-seo-tag
