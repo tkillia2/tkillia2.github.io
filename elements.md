@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Resume
+description: See my most up to date resume and learn about my experiences!
 image: assets/images/pic01.jpg
 nav-menu: true
 ---
