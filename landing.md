@@ -10,14 +10,14 @@ nav-menu: true
 <div id="main">
 
 <!-- One -->
-<!-- <section id="one">
+<section id="one">
 	<div class="inner">
 		<header class="major">
 			<h2>Below you can read about various projects from ML and Data Science to Websites to various Bots and more!</h2>
 		</header>
-		<p>Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa vel lacinia pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero. Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna.</p>
+		<p>I hope you enjoy hearing about some of the various projects that I have had the chance to create or work on. Heads Up! For some of these projects I have been in groups or partners! Below some of the projects there will be a <b>Learn More</b> button that can redirect you to the GitHub Repo for the project. </p>
 	</div>
-</section> -->
+</section>
 
 <!-- Two -->
 <section id="two" class="spotlights">
