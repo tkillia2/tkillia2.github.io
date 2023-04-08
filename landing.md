@@ -28,9 +28,9 @@ nav-menu: true
 		<div class="content">
 			<div class="inner">
 				<header class="major">
-					<h3>Orci maecenas</h3>
+					<h3>ASL Real Time Recognition</h3>
 				</header>
-				<p>Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis tempus.</p>
+				<p>For my Machine Learning class, my parter, <a href="https://www.linkedin.com/in/james-galante-980594254/">James</a>, and I chose to create a model that would recognize the alphabet (minus J and Z) in American Sign Language. The exclusion of J and Z came from the fact that these two letters require movement to sign. We ended up utilizing Google's MediaPipe Hands library to identify the hand in the frame, and then we performed real time classification by using K-Nearest Neightbors and Support Vector Machines. As you can see from our photo to the left, we felt that it was worthy of an A+!</p>
 				<ul class="actions">
 					<li><a href="https://github.com/tkillia2/ASL_Real_Time_Letter_Recognition_ML" class="button">Learn more</a></li>
 				</ul>
