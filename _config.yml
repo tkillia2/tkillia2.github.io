@@ -5,13 +5,13 @@ email: tkillia2@nd.edu
 description: A site to learn more about me, Tommy.<br /> You can read about my work, projects, and more! 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: 
-author: Thomas Killian
-street_address: 23 Shoal Creek Ct
-city: Bloomington
-state: IL
-zip_code: 61704
-country: United States of America
-phone: (309)-445-1666
+# author: Thomas Killian
+# street_address: 23 Shoal Creek Ct
+# city: Bloomington
+# state: IL
+# zip_code: 61704
+# country: United States of America
+# phone: (309)-445-1666
 
 # homepage tiles
 tiles-source: pages # accepts "posts" or "pages"
