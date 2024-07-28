@@ -58,12 +58,6 @@ function createBarChart(selector, data, title) {
         .attr("y", 420)
         .attr("text-anchor", "middle")
         .text(d => d.iso3c);
-    
-    svg.append("text")
-        .attr("x", 400)
-        .attr("y", 30)
-        .attr("text-anchor", "middle")
-        .text(title);
 }
 
 function createMap(selector, data, world) {
