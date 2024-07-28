@@ -38,6 +38,11 @@ function renderScene(scene, data, world) {
     }
 }
 
+function showGlobalStats(data) {
+    d3.select("#visualization").append("h2")
+        .text("Hello World");
+}
+
 function getDeclines(data) {
     return data
         .filter(d => !isNaN(d.trend)) 
