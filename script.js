@@ -207,8 +207,7 @@ function createMap(selector, data, world) {
         .enter().append("path")
         .attr("d", path)
         .attr("fill", d => {
-            const country = data.find(c => c.iso_num === d.id);
-            return country ? color(country.trend) : "#ccc"
+            return color(d.trend)
         })
         .attr("stroke", "#333")
         .attr("stroke-width", 0.5)
