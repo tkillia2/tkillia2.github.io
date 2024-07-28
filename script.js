@@ -1,7 +1,10 @@
-d3.csv("goal15.forest_shares.csv").then(function(data) {
+Promise.all([
+    d3.csv("data/deforestation.csv"),
+    d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json")
+]).then(function([data, world]) {
     data.forEach(d => {
-        d.forests_2000 = +d.forests_2000;
-        d.forests_2020 = +d.forests_2020;
+        d.forest_2000 = +d.forest_2000;
+        d.forest_2020 = +d.forest_2020;
         d.trend = +d.trend;
     });
 
@@ -10,6 +13,10 @@ d3.csv("goal15.forest_shares.csv").then(function(data) {
 
     createBarChart("#visualization", declines, "Declines in Forestation");
     createBarChart("#visualization", growths, "Growths in Forestation");
+
+    createMap("#map", data, world);
+}).catch(error => {
+    console.error("Error loading the data:", error);
 });
 
 function createBarChart(selector, data, title) {
@@ -58,14 +65,6 @@ function createBarChart(selector, data, title) {
         .attr("text-anchor", "middle")
         .text(title);
 }
-
-
-Promise.all([
-    d3.csv("goal15.forest_shares.csv"),
-    d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json")
-]).then(function([data, world]) {
-    createMap("#map", data, world);
-});
 
 function createMap(selector, data, world) {
     const svg = d3.select(selector).append("svg")
