@@ -15,3 +15,15 @@ h1 {
 p {
     margin-bottom: 30px; /* Space below the paragraph */
 }
+
+#tooltip {
+    position: absolute;
+    text-align: center;
+    width: auto;
+    height: auto;
+    padding: 5px;
+    font: 12px sans-serif;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
