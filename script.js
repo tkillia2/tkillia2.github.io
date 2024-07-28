@@ -209,7 +209,7 @@ function createMap(selector, data, world) {
             d3.select(this).attr("fill", "orange");
             const tooltip = d3.select("#tooltip")
                 .style("opacity", 1)
-                .html(`${d.country}<br/>Trend: ${d.trend}`)
+                .html(`${d.country}<br/>Trend: ${d.trend}<br/>Percent Forest in 2000: ${d.forests_2000}<br/>Percent Forest in 2020: ${d.forests_2020}`)
                 .style("left", (event.pageX + 5) + "px")
                 .style("top", (event.pageY - 28) + "px");
         })
