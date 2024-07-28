@@ -1,5 +1,5 @@
 Promise.all([
-    d3.csv("data/deforestation.csv"),
+    d3.csv("goal15.forest_shares.csv"),
     d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json")
 ]).then(function([data, world]) {
     data.forEach(d => {
