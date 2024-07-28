@@ -1,5 +1,5 @@
 // Sample data
-const data = [ /* Your data here */ ];
+const data = 'cfb23.csv';
 
 let currentScene = 0;
 
@@ -14,12 +14,11 @@ function renderScene(sceneIndex) {
 
   // Add elements based on the scene
   if (sceneIndex === 0) {
-    // Scene 1: Example content
-    svg.append('circle')
-      .attr('cx', 400)
-      .attr('cy', 300)
-      .attr('r', 50)
-      .style('fill', 'blue');
+    svg.append('text')
+      .attr('x', 100)
+      .attr('y', 100)
+      .text('2023 NCAA College Football Season Overview')
+      .style('font-size', '24px');
   } else if (sceneIndex === 1) {
     // Scene 2: Example content
     svg.append('rect')
