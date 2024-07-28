@@ -5,39 +5,48 @@ Promise.all([
     d3.csv("goal15.forest_shares.csv"),
     d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json")
 ]).then(function([deforestationData, world]) {
+    const countryNameMap = {};
+    const countries = topojson.feature(world, world.objects.countries).features;
+    
+    countries.forEach(country => {
+        const iso3c = country.id; 
+        const name = country.properties.name;
+        countryNameMap[iso3c] = name;
+    });
+
     data = deforestationData; 
-    initScenes(data, world);
+    initScenes(data, countryNameMap, world);
 });
 
-function initScenes(data, world) {
-    renderScene(currentScene, data, world);
+function initScenes(data, countryNameMap, world) {
+    renderScene(currentScene, data, countryNameMap, world);
 
     d3.select("#next").on("click", () => {
         currentScene++;
         if (currentScene < 3) {
-            renderScene(currentScene, data, world);
+            renderScene(currentScene, data, countryNameMap, world);
         }
     });
 
     d3.select("#prev").on("click", () => {
-        if (currentScene > 0) {
-            currentScene--;
-            renderScene(currentScene, data, world);
+        currentScene--;
+        if (currentScene >= 0) {
+            renderScene(currentScene, data, countryNameMap, world);
         }
     });
 }
 
-function renderScene(scene, data, world) {
+function renderScene(scene, data, countryNameMap, world) {
     d3.select("#visualization").html(""); 
     switch (scene) {
         case 0:
             showGlobalStats(data);
             break;
         case 1:
-            createBarChart("#visualization", getDeclines(data), "Declines in Forestation");
+            createBarChart("#visualization", getDeclines(data, countryNameMap), "Declines in Forestation");
             break;
         case 2:
-            createBarChart("#visualization", getGrowths(data), "Growths in Forestation");
+            createBarChart("#visualization", getGrowths(data, countryNameMap), "Growths in Forestation");
             break;
         default:
             // createMap("#map", data, world);
@@ -47,21 +56,31 @@ function renderScene(scene, data, world) {
 
 function showGlobalStats(data) {
     d3.select("#visualization").append("h2")
-        .text("Hello World");
+        .text("Global Forest Statistics (2000 - 2020)");
 }
 
-function getDeclines(data) {
+function getDeclines(data, countryNameMap) {
     return data
         .filter(d => !isNaN(d.trend)) 
         .sort((a, b) => a.trend - b.trend)
-        .slice(0, 5);
+        .slice(0, 5)
+        .map(d => ({
+            iso3c: d.iso3c,
+            country: countryNameMap[d.iso3c] || d.iso3c,
+            trend: Math.abs(d.trend)
+        }));
 }
 
-function getGrowths(data) {
+function getGrowths(data, countryNameMap) {
     return data
         .filter(d => !isNaN(d.trend)) 
         .sort((a, b) => b.trend - a.trend)
-        .slice(0, 5);
+        .slice(0, 5)
+        .map(d => ({
+            iso3c: d.iso3c,
+            country: countryNameMap[d.iso3c] || d.iso3c, 
+            trend: Math.abs(d.trend) 
+        }));
 }
 
 function createBarChart(selector, data, title) {
@@ -83,12 +102,12 @@ function createBarChart(selector, data, title) {
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
     const x = d3.scaleBand()
-        .domain(data.map(d => d.iso3c))
+        .domain(data.map(d => d.country)) 
         .range([0, width])
         .padding(0.1);
 
     const y = d3.scaleLinear()
-        .domain([0, d3.max(data, d => Math.abs(d.trend))])
+        .domain([0, d3.max(data, d => d.trend)]) 
         .nice()
         .range([height, 0]);
 
@@ -105,21 +124,20 @@ function createBarChart(selector, data, title) {
         .data(data)
         .enter().append("rect")
         .attr("class", "bar")
-        .attr("x", d => x(d.iso3c))
-        .attr("y", d => y(Math.abs(d.trend)))
+        .attr("x", d => x(d.country))
+        .attr("y", d => y(d.trend))
         .attr("width", x.bandwidth())
-        .attr("height", d => height - y(Math.abs(d.trend)))
+        .attr("height", d => height - y(d.trend))
         .attr("fill", color);
 
     svg.selectAll(".value-label")
         .data(data)
         .enter().append("text")
         .attr("class", "value-label")
-        .attr("x", d => x(d.iso3c) + x.bandwidth() / 2)
-        .attr("y", d => y(Math.abs(d.trend)) - 5)
-        .text(d => Math.abs(d.trend))
+        .attr("x", d => x(d.country) + x.bandwidth() / 2) 
+        .attr("y", d => y(d.trend) - 5) 
+        .text(d => d.trend) 
         .style("font-size", "12px")
         .style("fill", "black")
-        .style("text-anchor", "middle");
+        .style("text-anchor", "middle"); 
 }
-
