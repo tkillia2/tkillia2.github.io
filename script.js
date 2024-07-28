@@ -1,4 +1,4 @@
-let currentScene = 0;
+let currentScene = 1;
 let data;
 let countryData;
 
@@ -17,14 +17,14 @@ function initScenes(data, world) {
 
     d3.select("#next").on("click", () => {
         currentScene++;
-        if (currentScene < 4) {
+        if (currentScene < 3) {
             renderScene(currentScene, data, world);
         }
     });
 
     d3.select("#prev").on("click", () => {
         currentScene--;
-        if (currentScene >= 0) {
+        if (currentScene >= 1) {
             renderScene(currentScene, data, world);
         }
     });
@@ -33,9 +33,6 @@ function initScenes(data, world) {
 function renderScene(scene, data, world) {
     d3.select("#visualization").html(""); 
     switch (scene) {
-        case 0:
-            showGlobalStats(data);
-            break;
         case 1:
             createBarChart("#visualization", getDeclines(data), "Declines in Forestation");
             break;
@@ -46,11 +43,6 @@ function renderScene(scene, data, world) {
             createMap("#visualization", data, world);
             break;
     }
-}
-
-function showGlobalStats(data) {
-    d3.select("#visualization").append("h2")
-        .text("Global Forest Statistics (2000 - 2020)");
 }
 
 function getDeclines(data) {
@@ -193,6 +185,8 @@ function createMap(selector, data, world) {
         }
         if (trendData) {
             country.trend = trendData.trend;
+            country.forests_2000 = trendData.forests_2000
+            country.forests_2020 = trendData.forests_2020
         } 
         if (!countryInfo) {
             country.country = undefined
