@@ -17,7 +17,7 @@ function initScenes(data, world) {
 
     d3.select("#next").on("click", () => {
         currentScene++;
-        if (currentScene < 3) {
+        if (currentScene < 4) {
             renderScene(currentScene, data, world);
         }
     });
