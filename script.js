@@ -9,7 +9,7 @@ function renderScene(sceneIndex) {
 
   // Create SVG element
   const svg = container.append('svg')
-    .attr('width', 800)
+    .attr('width', 1200)
     .attr('height', 600);
 
   // Add elements based on the scene
@@ -28,12 +28,18 @@ function renderScene(sceneIndex) {
       .attr('width', 100)
       .attr('height', 100)
       .style('fill', 'green');
+  } else if (sceneIndex === 2) {
+    svg.append('circle')
+    .attr('cx', 400)
+    .attr('cy', 300)
+    .attr('r', 150)
+    .style('fill', 'yellow');
   }
   // Add more scenes as needed
 }
 
 d3.select('#nextButton').on('click', function() {
-  currentScene = (currentScene + 1) % 2;  // Cycle through scenes
+  currentScene = (currentScene + 1) % 3;  // Cycle through scenes
   renderScene(currentScene);
 });
 
