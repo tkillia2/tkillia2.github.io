@@ -99,7 +99,7 @@ function createBarChart(selector, data, title) {
     
     svg.append("text")
         .attr("x", width / 2)
-        .attr("y", -20) 
+        .attr("y", -150) 
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
         .text(title);
@@ -226,8 +226,8 @@ function createMap(selector, data, world) {
         });
     
     d3.select(selector).append("text")
-        .attr("x", width / 2) // Center the title
-        .attr("y", -20) // Position it above the map
+        .attr("x", width / 2)
+        .attr("y", -800) 
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
         .text("Global Forestation Trends (2000 - 2020)");
