@@ -96,8 +96,8 @@ function createBarChart(selector, data, title) {
     d3.select(selector).html("");
 
     const margin = {top: 200, right: 30, bottom: 40, left: 70};
-    const width = 600 - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
+    const width = 1000 - margin.left - margin.right;
+    const height = 700 - margin.top - margin.bottom;
 
     const svg = d3.select(selector).append("svg")
         .attr("width", width + margin.left + margin.right)
