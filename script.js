@@ -95,7 +95,7 @@ function createBarChart(selector, data, title) {
     }
     d3.select(selector).html("");
 
-    const margin = {top: 75, right: 30, bottom: 40, left: 70};
+    const margin = {top: 200, right: 30, bottom: 40, left: 70};
     const width = 600 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
@@ -108,7 +108,7 @@ function createBarChart(selector, data, title) {
     const x = d3.scaleBand()
         .domain(data.map(d => d.country)) 
         .range([0, width])
-        .padding(0.3);
+        .padding(0.5);
 
     const y = d3.scaleLinear()
         .domain([0, d3.max(data, d => d.trend)])
@@ -165,7 +165,7 @@ function createBarChart(selector, data, title) {
 
 function createMap(selector, data, world) {
     const width = 960;
-    const height = 500;
+    const height = 600;
 
     const projection = d3.geoMercator()
         .scale(150)
