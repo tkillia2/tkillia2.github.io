@@ -16,15 +16,15 @@ function initScenes(data, world) {
     renderScene(currentScene, data, world);
 
     d3.select("#next").on("click", () => {
-        currentScene++;
-        if (currentScene < 4) {
+        if (currentScene < 3) {
+            currentScene++;
             renderScene(currentScene, data, world);
         }
     });
 
     d3.select("#prev").on("click", () => {
-        currentScene--;
-        if (currentScene >= 1) {
+        if (currentScene > 1) {
+            currentScene--;
             renderScene(currentScene, data, world);
         }
     });
