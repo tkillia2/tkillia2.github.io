@@ -1,119 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Narrative Visualization</title>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <style>
-    #visualization-container {
-      width: 1200px;
-      height: 600px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deforestation and Climate Change</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #map {
+            width: 800px;
+            height: 400px;
+            margin: auto;
+        }
+        #visualization {
+            width: 800px;
+            height: 400px;
+            margin: auto;
+        }
+    </style>
 </head>
 <body>
-  <div id="visualization-container"></div>
-  <button id="nextButton">Next</button>
 
-  <script>
-    // Load the CSV data
-    d3.csv('cfb23.csv').then(data => {
-      let currentScene = 0;
+    <h1>Deforestation and Its Impact on Climate Change</h1>
+    <p>
+        Deforestation is accelerating climate change, threatening biodiversity, and ultimately harming the beauty and sustainability of our planet. 
+        This visualization explores countries with the biggest declines and growths in forestation.
+    </p>
 
-      function renderScene(sceneIndex) {
-        const container = d3.select('#visualization-container');
-        container.html('');  // Clear previous content
+    <div id="visualization"></div>
+    <div id="map"></div>
 
-        // Create SVG element
-        const svg = container.append('svg')
-          .attr('width', 1200)
-          .attr('height', 600);
-
-        // Add elements based on the scene
-        if (sceneIndex === 0) {
-          svg.append('text')
-            .attr('x', 100)
-            .attr('y', 100)
-            .text('2023 NCAA College Football Season Overview')
-            .style('font-size', '24px');
-        } else if (sceneIndex === 1) {
-          svg.append('text')
-            .attr('x', 100)
-            .attr('y', 50)
-            .text('Top Team Performances')
-            .style('font-size', '24px');
-
-          const margin = { top: 80, right: 30, bottom: 50, left: 60 };
-          const width = 800 - margin.left - margin.right;
-          const height = 600 - margin.top - margin.bottom;
-
-          // Filter and sort data to get the top 10 offensive teams
-          const top10Teams = data.sort((a, b) => d3.ascending(+a.Off_Rank, +b.Off_Rank)).slice(0, 10);
-
-          const x = d3.scaleLinear()
-            .domain([0, d3.max(top10Teams, d => +d.Off_Rank)])  // Ensure numeric data
-            .range([0, width]);
-
-          // Extract Team values into an array
-          const teams = top10Teams.map(d => d.Team);
-
-          const y = d3.scaleBand()
-            .domain(teams)  // Use the array for the domain
-            .range([0, height])
-            .padding(0.1);
-
-          const g = svg.append('g')
-            .attr('transform', `translate(${margin.left},${margin.top})`);
-
-          g.append('g')
-            .call(d3.axisLeft(y));
-
-          g.selectAll('rect')
-            .data(top10Teams)
-            .enter().append('rect')
-            .attr('x', x(0))
-            .attr('y', d => y(d.Team))
-            .attr('width', d => x(+d.Off_Rank))
-            .attr('height', y.bandwidth())
-            .attr('fill', 'steelblue');
-
-          g.append('g')
-            .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x));
-        } else if (sceneIndex === 2) {
-          svg.append('circle')
-            .attr('cx', 400)
-            .attr('cy', 300)
-            .attr('r', 150)
-            .style('fill', 'yellow');
-        } else if (sceneIndex === 3) {
-          svg.append('rect')
-            .attr('x', 350)
-            .attr('y', 250)
-            .attr('width', 300)
-            .attr('height', 500)
-            .style('fill', 'orange');
-        } else if (sceneIndex === 4) {
-          svg.append('circle')
-            .attr('cx', 400)
-            .attr('cy', 300)
-            .attr('r', 75)
-            .style('fill', 'red');
-        }
-        // Add more scenes as needed
-      }
-
-      d3.select('#nextButton').on('click', function() {
-        currentScene = (currentScene + 1) % 5;  // Cycle through scenes
-        renderScene(currentScene);
-      });
-
-      // Initial render
-      renderScene(currentScene);
-    }).catch(error => {
-      console.error('Error loading CSV data:', error);
-    });
-  </script>
+    <script src="script.js"></script>
 </body>
 </html>
