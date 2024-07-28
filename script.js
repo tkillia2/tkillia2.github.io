@@ -18,6 +18,13 @@ function initScenes(data, world) {
             renderScene(currentScene, data, world);
         }
     });
+
+    d3.select("#prev").on("click", () => {
+        if (currentScene > 0) {
+            currentScene--;
+            renderScene(currentScene, data, world);
+        }
+    });
 }
 
 function renderScene(scene, data, world) {
