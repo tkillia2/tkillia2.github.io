@@ -65,6 +65,11 @@ function getGrowths(data) {
 }
 
 function createBarChart(selector, data, title) {
+    if(title === "Growths in Forestation") {
+        color = "green"
+    } else {
+        color = "red"
+    }
     d3.select(selector).html("");
 
     const margin = {top: 20, right: 30, bottom: 40, left: 70};
@@ -104,7 +109,7 @@ function createBarChart(selector, data, title) {
         .attr("y", d => y(Math.abs(d.trend)))
         .attr("width", x.bandwidth())
         .attr("height", d => height - y(Math.abs(d.trend)))
-        .attr("fill", "red");
+        .attr("fill", color);
 
     svg.selectAll(".value-label")
         .data(data)
