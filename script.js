@@ -1,4 +1,4 @@
-d3.csv("data/deforestation.csv").then(function(data) {
+d3.csv("goal15.forest_shares.csv").then(function(data) {
     data.forEach(d => {
         d.forests_2000 = +d.forests_2000;
         d.forests_2020 = +d.forests_2020;
