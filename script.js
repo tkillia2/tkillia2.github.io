@@ -8,8 +8,8 @@ Promise.all([
         d.trend = +d.trend;
     });
 
-    const declines = data.sort((a, b) => a.trend - b.trend).slice(0, 5);
-    const growths = data.sort((a, b) => b.trend - a.trend).slice(0, 5);
+    const declines = getDeclines(data)
+    const growths = getGrowths(data)
 
     createBarChart("#visualization", declines, "Declines in Forestation");
     createBarChart("#visualization", growths, "Growths in Forestation");
@@ -18,6 +18,21 @@ Promise.all([
 }).catch(error => {
     console.error("Error loading the data:", error);
 });
+
+function getDeclines(data) {
+    return data
+        .filter(d => !isNaN(d.trend))
+        .sort((a, b) => a.trend - b.trend)
+        .slice(0, 5);
+}
+
+function getGrowths(data) {
+    return data
+        .filter(d => !isNaN(d.trend))
+        .sort((a, b) => b.trend - a.trend)
+        .slice(0, 5);
+}
+
 
 function createBarChart(selector, data, title) {
     const svg = d3.select(selector).append("svg")
