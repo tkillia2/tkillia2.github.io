@@ -167,12 +167,14 @@ function createMap(selector, data, world) {
         console.log(typeof(country.id))
         const countryInfo = countryData.find(c => c.iso_num == country.id);
         console.log('info: ',countryInfo)
-        const trendData = data.find(d => d.iso3c === country.id);
+        const trendData = data.find(d => d.iso3c === countryInfo.iso3);
+        console.log('trend: ', trendData)
         if (countryInfo && trendData) {
             country.trend = trendData.trend;
             country.country = countryInfo.country;
         } else {
             country.trend = 0; 
+            country.country = countryInfo.country
         }
     });
 
