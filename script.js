@@ -34,10 +34,10 @@ function renderScene(scene, data, world) {
     d3.select("#visualization").html(""); 
     switch (scene) {
         case 1:
-            createBarChart("#visualization", getDeclines(data), "Declines in Forestation");
+            createBarChart("#visualization", getDeclines(data), "Top 5 Countries for Declines in Forestation (2000-2020)");
             break;
         case 2:
-            createBarChart("#visualization", getGrowths(data), "Growths in Forestation");
+            createBarChart("#visualization", getGrowths(data), "Top 5 Countries for Growths in Forestation (2000-2020)");
             break;
         case 3:
             createMap("#visualization", data, world);
@@ -80,7 +80,7 @@ function getGrowths(data) {
 }
 
 function createBarChart(selector, data, title) {
-    if(title === "Growths in Forestation") {
+    if(title === "Top 5 Countries for Growths in Forestation (2000-2020)") {
         color = "green"
     } else {
         color = "red"
@@ -96,6 +96,13 @@ function createBarChart(selector, data, title) {
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
+    
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", -20) 
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text(title);
 
     const x = d3.scaleBand()
         .domain(data.map(d => d.country)) 
@@ -217,6 +224,13 @@ function createMap(selector, data, world) {
             d3.select(this).attr("fill", d => color(d.trend));
             d3.select("#tooltip").style("opacity", 0);
         });
+    
+    d3.select(selector).append("text")
+        .attr("x", width / 2) // Center the title
+        .attr("y", -20) // Position it above the map
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text("Global Forestation Trends (2000 - 2020)");
 }
 
 d3.select("body").append("div")
