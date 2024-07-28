@@ -163,12 +163,10 @@ function createMap(selector, data, world) {
         .range(["red", "green"]);
 
     countries.forEach(function(country) {
-        console.log('country: ', country.id)
-        console.log(typeof(country.id))
         const countryInfo = countryData.find(c => c.iso_num == country.id);
-        console.log('info: ',countryInfo)
-        const trendData = data.find(d => d.iso3c === countryInfo.iso3);
-        console.log('trend: ', trendData)
+        if (countryInfo.iso3) {
+            trendData = data.find(d => d.iso3c === countryInfo.iso3);
+        }
         if (countryInfo) {
             country.country = countryInfo.country
         }
