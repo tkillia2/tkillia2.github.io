@@ -17,7 +17,7 @@ function initScenes(data, world) {
 
     d3.select("#next").on("click", () => {
         currentScene++;
-        if (currentScene < 3) {
+        if (currentScene < 4) {
             renderScene(currentScene, data, world);
         }
     });
@@ -42,7 +42,7 @@ function renderScene(scene, data, world) {
         case 2:
             createBarChart("#visualization", getGrowths(data), "Growths in Forestation");
             break;
-        default:
+        case 3:
             createMap("#visualization", data, world);
             break;
     }
