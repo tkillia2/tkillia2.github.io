@@ -48,12 +48,15 @@
           const width = 800 - margin.left - margin.right;
           const height = 600 - margin.top - margin.bottom;
 
+          // Filter and sort data to get the top 10 offensive teams
+          const top10Teams = data.sort((a, b) => d3.ascending(+a.Off_Rank, +b.Off_Rank)).slice(0, 10);
+
           const x = d3.scaleLinear()
-            .domain([0, d3.max(data, d => +d.Off_Rank)])  // Ensure numeric data
+            .domain([0, d3.max(top10Teams, d => +d.Off_Rank)])  // Ensure numeric data
             .range([0, width]);
 
           // Extract Team values into an array
-          const teams = data.map(d => d.Team);
+          const teams = top10Teams.map(d => d.Team);
 
           const y = d3.scaleBand()
             .domain(teams)  // Use the array for the domain
@@ -67,7 +70,7 @@
             .call(d3.axisLeft(y));
 
           g.selectAll('rect')
-            .data(data)
+            .data(top10Teams)
             .enter().append('rect')
             .attr('x', x(0))
             .attr('y', d => y(d.Team))
