@@ -63,7 +63,9 @@ function getDeclines(data) {
             return {
                 iso3c: d.iso3c,
                 trend: Math.abs(d.trend), 
-                country: countryInfo ? countryInfo.country_common : d.iso3c 
+                country: countryInfo ? countryInfo.country_common : d.iso3c,
+                forests_2000: d.forests_2000,
+                forests_2020: d.forests_2020
             };
         });
 }
@@ -78,7 +80,9 @@ function getGrowths(data) {
             return {
                 iso3c: d.iso3c,
                 trend: Math.abs(d.trend),
-                country: countryInfo ? countryInfo.country_common : d.iso3c
+                country: countryInfo ? countryInfo.country_common : d.iso3c,
+                forests_2000: d.forests_2000,
+                forests_2020: d.forests_2020
             };
         });
 }
