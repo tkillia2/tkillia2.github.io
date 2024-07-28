@@ -7,6 +7,8 @@ Promise.all([
 ]).then(function([deforestationData, world]) {
     const countryNameMap = {};
     const countries = topojson.feature(world, world.objects.countries).features;
+
+    console.log('countires: ', countries)
     
     countries.forEach(country => {
         const iso3c = country.id; 
