@@ -83,7 +83,7 @@ function createBarChart(selector, data, title) {
         .padding(0.1);
 
     const y = d3.scaleLinear()
-        .domain([d3.min(data, d => d.trend), d3.max(data, d => d.trend)])
+        .domain([0, d3.max(data, d => Math.abs(d.trend))])
         .nice()
         .range([height, 0]);
 
@@ -101,19 +101,20 @@ function createBarChart(selector, data, title) {
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", d => x(d.iso3c))
-        .attr("y", d => y(d.trend))
+        .attr("y", d => y(Math.abs(d.trend)))
         .attr("width", x.bandwidth())
-        .attr("height", d => height - y(d.trend))
-        .attr("fill", d => d.trend < 0 ? "red" : "green");
+        .attr("height", d => height - y(Math.abs(d.trend)))
+        .attr("fill", "red");
 
     svg.selectAll(".value-label")
         .data(data)
         .enter().append("text")
         .attr("class", "value-label")
-        .attr("x", d => x(d.iso3c) - 10)
-        .attr("y", d => y(d.trend) + 4)
-        .text(d => d.trend) 
+        .attr("x", d => x(d.iso3c) + x.bandwidth() / 2)
+        .attr("y", d => y(Math.abs(d.trend)) - 5)
+        .text(d => Math.abs(d.trend))
         .style("font-size", "12px")
         .style("fill", "black")
-        .style("text-anchor", "end"); 
+        .style("text-anchor", "middle");
 }
+
