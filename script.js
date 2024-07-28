@@ -158,9 +158,8 @@ function createMap(selector, data, world) {
 
     const countries = topojson.feature(world, world.objects.countries).features;
 
-    const colorScale = d3.scaleLinear()
-        .domain([-100, 100])
-        .range(["red", "green"]);
+    const colorScale = d3.scaleSequential(d3.interpolateRdYlGn)
+        .domain([-100, 100]);
 
     countries.forEach(function(country) {
         const countryInfo = countryData.find(c => c.iso_num == country.id);
@@ -185,7 +184,15 @@ function createMap(selector, data, world) {
         .data(countries)
         .enter().append("path")
         .attr("d", path)
-        .attr("fill", d => colorScale(d.trend)) 
+        .attr("fill", d => {
+            if (d.trend > 0) {
+                return colorScale(d.trend);
+            } else if (d.trend < 0) {
+                return colorScale(d.trend);
+            } else {
+                return "gray";
+            }
+        })
         .attr("stroke", "#333")
         .attr("stroke-width", 0.5)
         .on("mouseover", function(event, d) {
