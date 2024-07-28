@@ -152,7 +152,7 @@ function createBarChart(selector, data, title) {
                 label: `2000: ${d.forests_2000}, 2020: ${d.forests_2020}`,
                 title: d.country
             },
-            x: x(d.iso3c) + x.bandwidth() / 2,
+            x: x(d.country) + x.bandwidth() / 2,
             y: y(Math.abs(d.trend)),
             dy: -30,
             dx: 0
