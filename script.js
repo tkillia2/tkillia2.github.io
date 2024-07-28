@@ -140,6 +140,23 @@ function createBarChart(selector, data, title) {
         .style("font-size", "12px")
         .style("fill", "black")
         .style("text-anchor", "middle"); 
+    
+    const makeAnnotations = d3.annotation()
+        .type(d3.annotationLabel)
+        .annotations(data.map(d => ({
+            note: {
+                label: `2000: ${d.forests_2000}, 2020: ${d.forests_2020}`,
+                title: d.country
+            },
+            x: x(d.iso3c) + x.bandwidth() / 2,
+            y: y(Math.abs(d.trend)),
+            dy: -30,
+            dx: 0
+        })));
+
+    svg.append("g")
+        .attr("class", "annotation-group")
+        .call(makeAnnotations);
 }
 
 function createMap(selector, data, world) {
