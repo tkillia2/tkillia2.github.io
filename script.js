@@ -164,7 +164,7 @@ function createMap(selector, data, world) {
 
     countries.forEach(function(country) {
         const countryInfo = countryData.find(c => c.iso_num == country.id);
-        if (countryInfo.iso3) {
+        if (countryInfo?.iso3) {
             trendData = data.find(d => d.iso3c === countryInfo.iso3);
         }
         if (countryInfo) {
