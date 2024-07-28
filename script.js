@@ -221,7 +221,7 @@ function createMap(selector, data, world) {
                 .style("top", (event.pageY - 28) + "px");
         })
         .on("mouseout", function() {
-            d3.select(this).attr("fill", d => colorScale(d.trend));
+            d3.select(this).attr("fill", d => color(d.trend));
             d3.select("#tooltip").style("opacity", 0);
         });
 }
