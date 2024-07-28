@@ -75,22 +75,22 @@ function createBarChart(selector, data, title) {
         .text(d => d.iso3c);
 }
 
-function createMap(selector, data, world) {
-    const svg = d3.select(selector).append("svg")
-        .attr("width", 800)
-        .attr("height", 400);
+// function createMap(selector, data, world) {
+//     const svg = d3.select(selector).append("svg")
+//         .attr("width", 800)
+//         .attr("height", 400);
 
-    const projection = d3.geoMercator().fitSize([800, 400], world);
-    const path = d3.geoPath().projection(projection);
+//     const projection = d3.geoMercator().fitSize([800, 400], world);
+//     const path = d3.geoPath().projection(projection);
 
-    svg.selectAll("path")
-        .data(topojson.feature(world, world.objects.countries).features)
-        .enter().append("path")
-        .attr("d", path)
-        .attr("fill", function(d) {
-            const country = data.find(c => c.iso3c === d.id);
-            return country ? (country.trend < 0 ? "red" : "green") : "lightgrey";
-        })
-        .attr("stroke", "white")
-        .attr("stroke-width", 0.5);
-}
+//     svg.selectAll("path")
+//         .data(topojson.feature(world, world.objects.countries).features)
+//         .enter().append("path")
+//         .attr("d", path)
+//         .attr("fill", function(d) {
+//             const country = data.find(c => c.iso3c === d.id);
+//             return country ? (country.trend < 0 ? "red" : "green") : "lightgrey";
+//         })
+//         .attr("stroke", "white")
+//         .attr("stroke-width", 0.5);
+// }
