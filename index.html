@@ -6,14 +6,15 @@
 <title>Movie night?</title>
 <style>
   :root {
-    --bg: #faf7f2;
-    --card: #ffffff;
-    --ink: #2b2620;
-    --muted: #8a8378;
-    --accent: #c1502e;
-    --border: #eae4d8;
-    --yes: #4c7a51;
-    --no: #b45252;
+    --bg-deep: #1b2f3d;
+    --bg-mid: #24404f;
+    --card: #f4ecd8;
+    --ink: #2e2416;
+    --muted: #8a7a5c;
+    --accent: #c17a3d;
+    --border: #d9c9a3;
+    --yes: #3f6b5e;
+    --no: #a6462f;
   }
   * { box-sizing: border-box; }
   body {
@@ -22,7 +23,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--bg);
+    background:
+      radial-gradient(circle at 20% 15%, rgba(255,255,255,0.03), transparent 45%),
+      radial-gradient(circle at 80% 85%, rgba(255,255,255,0.02), transparent 50%),
+      linear-gradient(160deg, var(--bg-deep), var(--bg-mid));
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     color: var(--ink);
     padding: 24px;
@@ -35,19 +39,20 @@
     max-width: 420px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.28);
   }
   .film {
     font-size: 13px;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--accent);
     font-weight: 600;
     margin-bottom: 10px;
   }
-  h1 { font-size: 24px; margin: 0 0 8px; line-height: 1.35; }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 25px; margin: 0 0 8px; line-height: 1.4; }
   .sub { color: var(--muted); font-size: 15px; margin-bottom: 28px; }
   .btns { display: flex; gap: 12px; }
+  .btns.stack { flex-direction: column; }
   button {
     flex: 1;
     padding: 14px 0;
@@ -62,63 +67,132 @@
   button:disabled { opacity: 0.5; cursor: default; }
   .yes-btn { background: var(--yes); color: white; }
   .no-btn { background: var(--no); color: white; }
+  .option-btn { background: #fff; color: var(--ink); border: 1px solid var(--border); }
+  .option-btn:hover { border-color: var(--accent); }
   .thanks { font-size: 40px; margin-bottom: 6px; }
-  .retry-msg {
-    margin-top: 16px;
-    font-size: 14px;
-    color: var(--no);
-    min-height: 18px;
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(43, 38, 32, 0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 10;
   }
+  .overlay.show { display: flex; }
+  .modal {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 32px 28px;
+    max-width: 320px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+  }
+  .modal .emoji { font-size: 44px; margin-bottom: 12px; }
+  .modal p { font-size: 15px; line-height: 1.5; margin: 0 0 20px; }
+  .modal button { background: var(--ink); color: white; padding: 10px 0; }
 </style>
 </head>
 <body>
   <div class="card" id="card"></div>
 
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <div class="emoji">💔</div>
+      <p>Sorry, that option isn't available. Please try again.</p>
+      <button id="closeModal">Okay</button>
+    </div>
+  </div>
+
 <script>
-// Private ntfy.sh topic — you subscribe to this in the ntfy app to get
-// a push notification the instant she answers. No page needs to stay open.
+// Private ntfy.sh topic — subscribe to this in the ntfy app to get a push
+// notification the instant she answers each step. No page needs to stay open.
 const TOPIC = 'odyssey-ask-6cf2dumye1';
 const card = document.getElementById('card');
+const overlay = document.getElementById('overlay');
+const RESTAURANTS = ['Del Seoul', 'Cook Together', 'Sweet Green', 'Something else'];
 
-async function postAnswer(answer) {
+async function notify(message, tag) {
   await fetch(`https://ntfy.sh/${TOPIC}`, {
     method: 'POST',
-    headers: {
-      'Title': 'The Odyssey',
-      'Tags': 'white_check_mark'
-    },
-    body: "She's free — you're on!"
+    headers: { 'Title': 'The Odyssey plans', 'Tags': tag },
+    body: message
   });
 }
 
-function renderQuestion() {
+function renderMovieQuestion() {
   card.innerHTML = `
     <div class="film">Movie Night</div>
-    <h1>Are you free to watch The Odyssey with me tomorrow?</h1>
+    <h1>Are you free to watch The Odyssey with me tomorrow at AMC NewCity 14 @ 2:30?</h1>
     <div class="btns">
       <button class="yes-btn" id="yesBtn">Yes, I'm in</button>
       <button class="no-btn" id="noBtn">Can't make it</button>
     </div>
-    <div class="retry-msg" id="retryMsg"></div>
   `;
-  document.getElementById('yesBtn').onclick = respond;
-  document.getElementById('noBtn').onclick = () => {
-    document.getElementById('retryMsg').textContent =
-      "Sorry, that option isn't available — please try again.";
+  document.getElementById('yesBtn').onclick = async () => {
+    setDisabled(true);
+    await notify("She's free for the movie — you're on!", 'white_check_mark');
+    renderDinnerQuestion();
   };
+  document.getElementById('noBtn').onclick = () => overlay.classList.add('show');
 }
 
-async function respond() {
-  document.querySelectorAll('button').forEach(b => b.disabled = true);
-  await postAnswer();
+function renderDinnerQuestion() {
+  card.innerHTML = `
+    <div class="film">Movie Night</div>
+    <h1>Want to grab dinner after?</h1>
+    <div class="btns">
+      <button class="yes-btn" id="yesBtn">Yes, let's eat</button>
+      <button class="no-btn" id="noBtn">Not this time</button>
+    </div>
+  `;
+  document.getElementById('yesBtn').onclick = async () => {
+    setDisabled(true);
+    await notify("She's in for dinner too!", 'fork_and_knife');
+    renderRestaurantOptions();
+  };
+  document.getElementById('noBtn').onclick = () => overlay.classList.add('show');
+}
+
+function renderRestaurantOptions() {
+  card.innerHTML = `
+    <div class="film">Dinner</div>
+    <h1>Where should we go?</h1>
+    <div class="btns stack" id="optionBtns"></div>
+  `;
+  const container = document.getElementById('optionBtns');
+  RESTAURANTS.forEach(name => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = name;
+    btn.onclick = async () => {
+      setDisabled(true);
+      await notify(`Dinner pick: ${name}`, 'plate_with_cutlery');
+      renderThanks("Perfect, it's a plan!", `Dinner at ${name} after the movie.`);
+    };
+    container.appendChild(btn);
+  });
+}
+
+function renderThanks(title, sub) {
   card.innerHTML = `
     <div class="thanks">🎬</div>
-    <h1>Great, see you there!</h1>
-    <div class="sub">Your answer has been sent.</div>
+    <h1>${title}</h1>
+    <div class="sub">${sub}</div>
   `;
 }
 
-renderQuestion();
+function setDisabled(state) {
+  document.querySelectorAll('button').forEach(b => b.disabled = state);
+}
+
+document.getElementById('closeModal').onclick = () => overlay.classList.remove('show');
+overlay.onclick = (e) => { if (e.target === overlay) overlay.classList.remove('show'); };
+
+renderMovieQuestion();
 </script>
 </body>
 </html>
