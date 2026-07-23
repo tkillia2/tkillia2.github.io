@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movie night?</title>
+<style>
+  :root {
+    --bg: #faf7f2;
+    --card: #ffffff;
+    --ink: #2b2620;
+    --muted: #8a8378;
+    --accent: #c1502e;
+    --border: #eae4d8;
+    --yes: #4c7a51;
+    --no: #b45252;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    padding: 24px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 32px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  }
+  .film {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  h1 { font-size: 24px; margin: 0 0 8px; line-height: 1.35; }
+  .sub { color: var(--muted); font-size: 15px; margin-bottom: 28px; }
+  .btns { display: flex; gap: 12px; }
+  button {
+    flex: 1;
+    padding: 14px 0;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.08s ease, opacity 0.15s ease;
+  }
+  button:active { transform: scale(0.97); }
+  button:disabled { opacity: 0.5; cursor: default; }
+  .yes-btn { background: var(--yes); color: white; }
+  .no-btn { background: var(--no); color: white; }
+  .thanks { font-size: 40px; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+  <div class="card" id="card"></div>
+
+<script>
+// Private ntfy.sh topic — you subscribe to this in the ntfy app to get
+// a push notification the instant she answers. No page needs to stay open.
+const TOPIC = 'odyssey-ask-6cf2dumye1';
+const WHEN = 'tomorrow (Fri, Jul 24) at 2:30';
+const card = document.getElementById('card');
+
+async function postAnswer(answer) {
+  await fetch(`https://ntfy.sh/${TOPIC}`, {
+    method: 'POST',
+    headers: {
+      'Title': 'The Odyssey',
+      'Tags': answer === 'yes' ? 'white_check_mark' : 'x'
+    },
+    body: answer === 'yes' ? "She's free — you're on!" : "She can't make it."
+  });
+}
+
+function renderQuestion() {
+  card.innerHTML = `
+    <div class="film">The Odyssey</div>
+    <h1>Free to watch it ${WHEN}?</h1>
+    <div class="btns">
+      <button class="yes-btn" id="yesBtn">Yes, I'm in</button>
+      <button class="no-btn" id="noBtn">Can't make it</button>
+    </div>
+  `;
+  document.getElementById('yesBtn').onclick = () => respond('yes');
+  document.getElementById('noBtn').onclick = () => respond('no');
+}
+
+async function respond(answer) {
+  document.querySelectorAll('button').forEach(b => b.disabled = true);
+  await postAnswer(answer);
+  card.innerHTML = `
+    <div class="thanks">${answer === 'yes' ? '🎬' : '📭'}</div>
+    <h1>${answer === 'yes' ? "Great, see you there!" : "No worries, thanks for letting them know."}</h1>
+    <div class="sub">Your answer has been sent.</div>
+  `;
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
