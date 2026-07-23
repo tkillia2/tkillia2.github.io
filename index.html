@@ -122,6 +122,19 @@
   .modal .emoji { font-size: 44px; margin-bottom: 12px; }
   .modal p { font-size: 15px; line-height: 1.5; margin: 0 0 20px; }
   .modal button { background: var(--ink); color: white; padding: 10px 0; }
+
+  .confetti-piece {
+    position: fixed;
+    top: -10%;
+    font-size: 26px;
+    pointer-events: none;
+    z-index: 20;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    from { transform: translateY(0) rotate(0deg); opacity: 1; }
+    to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
 </style>
 </head>
 <body>
@@ -144,6 +157,21 @@ const TOPIC = 'odyssey-ask-6cf2dumye1';
 const card = document.getElementById('card');
 const overlay = document.getElementById('overlay');
 const RESTAURANTS = ['Del Seoul', 'Cook Together', 'Sweet Green', 'Something else'];
+
+function confettiBurst(emojis, count = 26) {
+  for (let i = 0; i < count; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    piece.style.left = `${Math.random() * 100}vw`;
+    const duration = 2.2 + Math.random() * 1.4;
+    piece.style.animationDuration = `${duration}s`;
+    piece.style.animationDelay = `${Math.random() * 0.5}s`;
+    piece.style.fontSize = `${18 + Math.random() * 14}px`;
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), (duration + 0.5) * 1000);
+  }
+}
 
 function flipTo(renderFn) {
   card.classList.remove('flip-in');
@@ -180,6 +208,7 @@ function renderMovieQuestion() {
   document.getElementById('yesBtn').onclick = async () => {
     setDisabled(true);
     await notify("She's free for the movie — you're on!", 'white_check_mark');
+    confettiBurst(['🍿']);
     flipTo(renderDinnerQuestion);
   };
   document.getElementById('noBtn').onclick = () => overlay.classList.add('show');
@@ -234,6 +263,7 @@ function renderThanks(title, sub) {
     <h1>${title}</h1>
     <div class="sub">${sub}</div>
   `;
+  confettiBurst(['💕', '💖', '❤️', '💗']);
 }
 
 function setDisabled(state) {
