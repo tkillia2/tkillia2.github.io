@@ -45,6 +45,7 @@
       radial-gradient(circle at 50% 90%, rgba(255,120,90,0.08), transparent 50%),
       linear-gradient(160deg, #2a1218, #3d1a1e);
   }
+  .card-wrap { perspective: 1200px; }
   .card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -54,7 +55,20 @@
     width: 100%;
     text-align: center;
     box-shadow: 0 8px 28px rgba(0,0,0,0.28);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transform-origin: left center;
   }
+  @keyframes flipOut {
+    from { transform: rotateY(0deg); opacity: 1; }
+    to { transform: rotateY(-100deg); opacity: 0; }
+  }
+  @keyframes flipIn {
+    from { transform: rotateY(100deg); opacity: 0; }
+    to { transform: rotateY(0deg); opacity: 1; }
+  }
+  .card.flip-out { animation: flipOut 0.4s ease forwards; }
+  .card.flip-in { animation: flipIn 0.4s ease forwards; }
   .film {
     font-size: 13px;
     letter-spacing: 0.12em;
@@ -111,7 +125,9 @@
 </style>
 </head>
 <body>
-  <div class="card" id="card"></div>
+  <div class="card-wrap">
+    <div class="card" id="card"></div>
+  </div>
 
   <div class="overlay" id="overlay">
     <div class="modal">
@@ -128,6 +144,21 @@ const TOPIC = 'odyssey-ask-6cf2dumye1';
 const card = document.getElementById('card');
 const overlay = document.getElementById('overlay');
 const RESTAURANTS = ['Del Seoul', 'Cook Together', 'Sweet Green', 'Something else'];
+
+function flipTo(renderFn) {
+  card.classList.remove('flip-in');
+  card.classList.add('flip-out');
+  card.addEventListener('animationend', function outHandler() {
+    card.removeEventListener('animationend', outHandler);
+    renderFn();
+    card.classList.remove('flip-out');
+    card.classList.add('flip-in');
+    card.addEventListener('animationend', function inHandler() {
+      card.removeEventListener('animationend', inHandler);
+      card.classList.remove('flip-in');
+    }, { once: true });
+  }, { once: true });
+}
 
 async function notify(message, tag) {
   await fetch(`https://ntfy.sh/${TOPIC}`, {
@@ -149,7 +180,7 @@ function renderMovieQuestion() {
   document.getElementById('yesBtn').onclick = async () => {
     setDisabled(true);
     await notify("She's free for the movie — you're on!", 'white_check_mark');
-    renderDinnerQuestion();
+    flipTo(renderDinnerQuestion);
   };
   document.getElementById('noBtn').onclick = () => overlay.classList.add('show');
 }
@@ -167,7 +198,7 @@ function renderDinnerQuestion() {
   document.getElementById('yesBtn').onclick = async () => {
     setDisabled(true);
     await notify("She's in for dinner too!", 'fork_and_knife');
-    renderRestaurantOptions();
+    flipTo(renderRestaurantOptions);
   };
   document.getElementById('noBtn').onclick = () => overlay.classList.add('show');
 }
@@ -191,7 +222,7 @@ function renderRestaurantOptions() {
       setDisabled(true);
       await notify(`Dinner pick: ${name}`, 'plate_with_cutlery');
       const sub = subMessages[name] || `Dinner at ${name} after the movie.`;
-      renderThanks("Perfect, it's a plan!", sub);
+      flipTo(() => renderThanks("Perfect, it's a plan!", sub));
     };
     container.appendChild(btn);
   });
