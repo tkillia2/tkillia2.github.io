@@ -178,6 +178,10 @@ function renderRestaurantOptions() {
     <h1>Where should we go?</h1>
     <div class="btns stack" id="optionBtns"></div>
   `;
+  const subMessages = {
+    'Cook Together': "We can get groceries at Marianos after the movie!",
+    'Something else': "Feel free to let me know what you're thinking."
+  };
   const container = document.getElementById('optionBtns');
   RESTAURANTS.forEach(name => {
     const btn = document.createElement('button');
@@ -186,7 +190,8 @@ function renderRestaurantOptions() {
     btn.onclick = async () => {
       setDisabled(true);
       await notify(`Dinner pick: ${name}`, 'plate_with_cutlery');
-      renderThanks("Perfect, it's a plan!", `Dinner at ${name} after the movie.`);
+      const sub = subMessages[name] || `Dinner at ${name} after the movie.`;
+      renderThanks("Perfect, it's a plan!", sub);
     };
     container.appendChild(btn);
   });
