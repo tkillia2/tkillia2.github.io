@@ -150,7 +150,7 @@
   <div class="overlay" id="overlay">
     <div class="modal">
       <div class="emoji">💔</div>
-      <p>Sorry, that option isn't available. Please try again.</p>
+      <p id="modalMsg">Sorry, that option isn't available. Please try again.</p>
       <button id="closeModal">Okay</button>
     </div>
   </div>
@@ -162,6 +162,11 @@ const TOPIC = 'odyssey-ask-6cf2dumye1';
 const card = document.getElementById('card');
 const overlay = document.getElementById('overlay');
 const RESTAURANTS = ['Del Seoul', 'Cook Together', 'Sweet Green', 'Something else'];
+
+function showModal(message) {
+  document.getElementById('modalMsg').textContent = message;
+  overlay.classList.add('show');
+}
 
 function confettiBurst(emojis, count = 26) {
   for (let i = 0; i < count; i++) {
@@ -216,7 +221,7 @@ function renderMovieQuestion() {
     confettiBurst(['🍿']);
     flipTo(renderDinnerQuestion);
   };
-  document.getElementById('noBtn').onclick = () => overlay.classList.add('show');
+  document.getElementById('noBtn').onclick = () => showModal("Let's try that again please 🙄");
 }
 
 function renderDinnerQuestion() {
@@ -234,7 +239,7 @@ function renderDinnerQuestion() {
     await notify("She's in for dinner too!", 'fork_and_knife');
     flipTo(renderRestaurantOptions);
   };
-  document.getElementById('noBtn').onclick = () => overlay.classList.add('show');
+  document.getElementById('noBtn').onclick = () => showModal("Yeah that ain't gonna work 😡");
 }
 
 function renderRestaurantOptions() {
