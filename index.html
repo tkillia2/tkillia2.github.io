@@ -100,7 +100,7 @@
   button:disabled { opacity: 0.5; cursor: default; }
   .yes-btn { background: var(--yes); color: white; }
   .no-btn { background: var(--no); color: white; }
-  .option-btn { background: #fff; color: var(--ink); border: 1px solid var(--border); }
+  .option-btn { background: #f7f0e3; color: var(--ink); border: 1px solid var(--border); }
   .option-btn:hover { border-color: var(--accent); }
   .thanks { font-size: 40px; margin-bottom: 6px; }
 
@@ -210,14 +210,21 @@ function renderMovieQuestion() {
   card.innerHTML = `
     <div class="film">Movie Night</div>
     <h1>Are you free to watch The Odyssey with me tomorrow at AMC NewCity 14 @ 2:30?</h1>
-    <div class="btns">
+    <div class="btns stack">
       <button class="yes-btn" id="yesBtn">Yes, I'm in</button>
+      <button class="option-btn" id="altBtn">Could we do the Music Box @ 4:15?</button>
       <button class="no-btn" id="noBtn">Can't make it</button>
     </div>
   `;
   document.getElementById('yesBtn').onclick = async () => {
     setDisabled(true);
     await notify("She's free for the movie — you're on!", 'white_check_mark');
+    confettiBurst(['🍿']);
+    flipTo(renderDinnerQuestion);
+  };
+  document.getElementById('altBtn').onclick = async () => {
+    setDisabled(true);
+    await notify("She wants to do Music Box @ 4:15 instead!", 'clapper');
     confettiBurst(['🍿']);
     flipTo(renderDinnerQuestion);
   };
