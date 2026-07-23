@@ -63,6 +63,12 @@
   .yes-btn { background: var(--yes); color: white; }
   .no-btn { background: var(--no); color: white; }
   .thanks { font-size: 40px; margin-bottom: 6px; }
+  .retry-msg {
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--no);
+    min-height: 18px;
+  }
 </style>
 </head>
 <body>
@@ -72,7 +78,6 @@
 // Private ntfy.sh topic — you subscribe to this in the ntfy app to get
 // a push notification the instant she answers. No page needs to stay open.
 const TOPIC = 'odyssey-ask-6cf2dumye1';
-const WHEN = 'tomorrow (Fri, Jul 24) at 2:30';
 const card = document.getElementById('card');
 
 async function postAnswer(answer) {
@@ -80,31 +85,35 @@ async function postAnswer(answer) {
     method: 'POST',
     headers: {
       'Title': 'The Odyssey',
-      'Tags': answer === 'yes' ? 'white_check_mark' : 'x'
+      'Tags': 'white_check_mark'
     },
-    body: answer === 'yes' ? "She's free — you're on!" : "She can't make it."
+    body: "She's free — you're on!"
   });
 }
 
 function renderQuestion() {
   card.innerHTML = `
-    <div class="film">The Odyssey</div>
-    <h1>Free to watch it ${WHEN}?</h1>
+    <div class="film">Movie Night</div>
+    <h1>Are you free to watch The Odyssey with me tomorrow?</h1>
     <div class="btns">
       <button class="yes-btn" id="yesBtn">Yes, I'm in</button>
       <button class="no-btn" id="noBtn">Can't make it</button>
     </div>
+    <div class="retry-msg" id="retryMsg"></div>
   `;
-  document.getElementById('yesBtn').onclick = () => respond('yes');
-  document.getElementById('noBtn').onclick = () => respond('no');
+  document.getElementById('yesBtn').onclick = respond;
+  document.getElementById('noBtn').onclick = () => {
+    document.getElementById('retryMsg').textContent =
+      "Sorry, that option isn't available — please try again.";
+  };
 }
 
-async function respond(answer) {
+async function respond() {
   document.querySelectorAll('button').forEach(b => b.disabled = true);
-  await postAnswer(answer);
+  await postAnswer();
   card.innerHTML = `
-    <div class="thanks">${answer === 'yes' ? '🎬' : '📭'}</div>
-    <h1>${answer === 'yes' ? "Great, see you there!" : "No worries, thanks for letting them know."}</h1>
+    <div class="thanks">🎬</div>
+    <h1>Great, see you there!</h1>
     <div class="sub">Your answer has been sent.</div>
   `;
 }
